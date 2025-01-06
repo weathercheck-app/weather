@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:weathercheck_app/screens/SearchRegionsScreen.dart';
 import 'package:weathercheck_app/widget/BottomBar.dart';
-import 'screens/HomeScreen.dart';
 
 void main() {
   runApp(WeatherApp()); // runApp은 루트 위젯을 실행하는것
@@ -30,14 +30,11 @@ class _WeatherAppState extends State<WeatherApp> with SingleTickerProviderStateM
             controller: controller,
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
+              SearchRegionsScreen(),
               Container(
                   child: Center(
-                    child: Text('Search')
+                    child: Text('home')
               )),
-              Container(
-                  child: Center(
-                      child: Text('home')
-                  )),
               Container(
                   child: Center(
                       child: Text('list')
