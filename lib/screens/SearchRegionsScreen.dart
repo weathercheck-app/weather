@@ -6,7 +6,11 @@ class SearchRegionsScreen extends StatefulWidget {
   _SearchRegionsScreenState createState() => _SearchRegionsScreenState();
 }
 
-class _SearchRegionsScreenState extends State<SearchRegionsScreen> {
+class _SearchRegionsScreenState extends State<SearchRegionsScreen> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   final APIService apiService = APIService();
   String? selectedRegion;
   String? selectedCity;
@@ -122,6 +126,7 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> {
                   ),
                 ],
               ),
+
             // 세 번째 드롭다운: 관광지
             if (selectedCity != null)
               Column(
@@ -152,6 +157,20 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> {
                   ),
                 ],
               ),
+
+            // 선택된 Spot 표시
+            if (selectedSpot != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text('현재 선택된 스팟: $selectedSpot',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              )
+            else if (selectedSpot == null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text('현재 스팟이 선택되지 않았어요',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  )
           ],
         ),
       ),
