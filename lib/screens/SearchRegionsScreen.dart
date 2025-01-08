@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weathercheck_app/providers/RegionNotifier.dart';
 import 'package:weathercheck_app/services/APIService.dart';
 
 class SearchRegionsScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> with Automati
 
   List<String> regions = [];
   List<String> cities = [];
-  List<String> spots = []; // 세 번째 드롭다운의 스팟 데이터
+  List<Map<String,String>> spots = []; // 세 번째 드롭다운의 스팟 데이터
 
   @override
   void initState() {
@@ -45,8 +47,8 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> with Automati
   }
 
   // spot 리스트 불러오기
-  Future<void> _loadSpots(String spot) async {
-    final List<String> spotData = await apiService.RegionsThirdList(spot);
+  Future<void> _loadSpots(String city) async {
+    final List<Map<String,String>> spotData = await apiService.RegionsThirdList(city);
     setState(() {
       spots = spotData;
       selectedSpot = null; // 스팟 초기화
@@ -55,7 +57,9 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> with Automati
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ChangeNotifierProvider(
+      create: (context) => RegionNotifier(),
+      child: Scaffold(
       appBar: AppBar(
         title: Text('Search Regions'),
       ),
@@ -144,11 +148,14 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> with Automati
                             setState(() {
                               selectedSpot = newValue;
                             });
+                            RegionNotifier updateNotifier = Provider.of<RegionNotifier>(context, listen: false);
+                            String? rid = spots.firstWhere((spot) => spot['sname'] == newValue)['rid'];  // 여기서 실제 rid 값 추출 필요
+                            updateNotifier.updateSelectedSpot(newValue, rid); // 스팟과 rid 값 업데이트
                           },
                           items: spots.map<DropdownMenuItem<String>>((spot) {
                             return DropdownMenuItem<String>(
-                              value: spot,
-                              child: Text(spot),
+                              value: spot['sname'], // sname을 value로 설정
+                              child: Text(spot['sname']!),
                             );
                           }).toList(),
                         ),
@@ -174,6 +181,7 @@ class _SearchRegionsScreenState extends State<SearchRegionsScreen> with Automati
           ],
         ),
       ),
+    ),
     );
   }
 }

@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:weathercheck_app/providers/RegionNotifier.dart';
+import 'package:weathercheck_app/screens/HomeScreen.dart';
 import 'package:weathercheck_app/screens/SearchRegionsScreen.dart';
 import 'package:weathercheck_app/widget/BottomBar.dart';
 
 void main() {
-  runApp(WeatherApp()); // runApp은 루트 위젯을 실행하는것
+  runApp(
+    MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => RegionNotifier()),
+    ],
+      child: WeatherApp()
+  ),
+  ); // runApp은 루트 위젯을 실행하는것
 }
 
 class WeatherApp extends StatefulWidget { // MyAPP은 화면을 담당하는 레이아웃
@@ -31,10 +40,7 @@ class _WeatherAppState extends State<WeatherApp> with SingleTickerProviderStateM
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               SearchRegionsScreen(),
-              Container(
-                  child: Center(
-                    child: Text('home')
-              )),
+              HomeScreen(),
               Container(
                   child: Center(
                       child: Text('list')

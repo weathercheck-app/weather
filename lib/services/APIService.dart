@@ -21,12 +21,13 @@ class APIService {
     return data.map((e) => e['saname'] as String).toList();
   }
 
-  Future<List<String>> RegionsThirdList(String saname) async {
+  Future<List<Map<String, String>>> RegionsThirdList(String saname) async {
     // cname 값을 쿼리 파라미터로 추가
     final response = await http.get(Uri.parse('$host/Regions/third?saname=$saname'));
 
     List<Map<String, dynamic>> data = _decodeResponse(response);
-    return data.map((e) => e['sname'] as String).toList();
+    print(data);
+    return data.map((e) => {'rid': e['rid'].toString(), 'sname': e['sname'].toString()}).toList();
   }
 
 
